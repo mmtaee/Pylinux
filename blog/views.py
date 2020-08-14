@@ -87,8 +87,8 @@ class TagsView(ListView):
     template_name = 'tags.html'
 
     def get_queryset(self, *args, **kwargs):
-        slug = self.kwargs.get('slug')
-        tags = get_object_or_404(Tag, slug=slug)
+        id = self.kwargs.get('id')
+        tags = get_object_or_404(Tag, id=id)
         queryset = Post.objects.filter(tags=tags).order_by('-title')
         return queryset
 

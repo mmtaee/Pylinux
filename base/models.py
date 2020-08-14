@@ -33,7 +33,7 @@ class Post(models.Model):
     last_update = models.DateTimeField(_("last update"), auto_now=True)
     view = models.PositiveIntegerField(null=True, blank=True, default=0)
     slug = models.SlugField(unique=True, max_length=100)
-    commenting = models.BooleanField(_("commenting"), default=True)
+    commenting = models.BooleanField(_("commenting"), default=True, help_text="if checked: post commenting is disabled")
     tags = TaggableManager()
     publish = models.BooleanField(_("publish"), default=False)
 
