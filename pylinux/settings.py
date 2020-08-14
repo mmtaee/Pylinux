@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'taggit',
     'social_django',
+    'admin_honeypot',
     # apps :
     'user_auth.apps.UserAuthConfig',
     'base.apps.BaseConfig',
@@ -152,11 +153,9 @@ if DEBUG:
     ]
 
 else:
-    # TODO : deployment
-    # SESSION_COOKIE_SECURE = True
-    # CSRF_COOKIE_SECURE = True
-    # SECURE_SSL_REDIRECT = True
-
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
     STATIC_ROOT = os.path.join(BASE_DIR, "static/")
     STATICFILES_FINDERS = (
         'django.contrib.staticfiles.finders.FileSystemFinder',

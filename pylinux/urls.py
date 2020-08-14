@@ -17,12 +17,11 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
-    # TODO admin honypot
-    path('admin/', admin.site.urls),
-
-    # path('main/', decorator_include(writeruser_required, 'base.urls')),
-    # path('', decorator_include(complete_oauth_profile, 'blog.urls')),
-    # path('auth/', include('user_auth.urls')),
+    path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+    path('secret/', admin.site.urls),
+    path('main/', decorator_include(writeruser_required, 'base.urls')),
+    path('', decorator_include(complete_oauth_profile, 'blog.urls')),
+    path('auth/', include('user_auth.urls')),
     prefix_default_language=False,
 )
 
