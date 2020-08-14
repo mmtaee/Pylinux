@@ -73,6 +73,10 @@ class Messaging(models.Model):
     message = RichTextField(config_name='message')
     seen = models.BooleanField(_("seen"), default=False)
 
+    class Meta:
+        verbose_name = _("message")
+        verbose_name_plural = _("messages")
+
     def __str__(self):
         return f'sender : {self.sender}, reciver : {self.reciver}'
 
@@ -88,6 +92,10 @@ class ReplyMessage(models.Model):
     messaging = models.ForeignKey(Messaging, on_delete=models.CASCADE)
     message = RichTextField(config_name='message')
     create = models.DateTimeField(_("create time"), auto_now_add=True)
+
+    class Meta:
+        verbose_name = _("reply")
+        verbose_name_plural = _("replies")
 
     def __str__(self):
         return self.sender.username
@@ -108,6 +116,10 @@ class Report(models.Model):
     reason = models.CharField(max_length=4, choices=REPORT_CHOISES)
 
 
+    class Meta:
+        verbose_name = _("report")
+        verbose_name_plural = _("reports")
+
     def __str__(self):
         return self.reporter.username
 
@@ -118,6 +130,10 @@ class ContactUs(models.Model):
     subject = models.CharField(max_length=300)
     message = models.TextField()
 
+
+    class Meta:
+        verbose_name = _("contact us")
+        verbose_name_plural = _("contact us")
 
     def __str__(self):
         return self.name
