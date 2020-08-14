@@ -102,7 +102,7 @@ class Activation(View):
         if account_activation_token.check_token(user, token):
             user.is_active = True
             user.save()
-            login(request, user)
+            login(request, user, backend='pylinux.backends.EmailBackend')
             msg = _('your registration and login has been completed')
             messages.success(request ,msg)
             return redirect('/')
@@ -285,13 +285,6 @@ def handler500(request):
     view = ErrorHandler.as_view(status_code=500)
     return view(request)
 
-
-def test_500_view(request):
-    from django.core.exceptions import SuspiciousOperation
-
-
-    # raise SuspiciousOperation
-    # return HttpResponse(status=500)
 
 class HandlerTest(TemplateView):
     template_name = ''

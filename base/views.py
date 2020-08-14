@@ -288,7 +288,6 @@ class ContactUsMessageView(ListView):
         return super().dispatch(request, *args, **kwargs)
 
 
-
 class ContactUsMessageDeleteView(RedirectView):
     url = reverse_lazy('base:contact_us_message')
 

@@ -39,7 +39,8 @@ class MessagingForm(forms.ModelForm):
         user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
         self.fields['reciver'] = forms.ModelChoiceField(
-                            queryset=User.objects.exclude(username=user.username),
+                            # remove is_writer=True to send msg to all user
+                            queryset=User.objects.filter(is_writer=True).exclude(username=user.username),
                             required=True,
                             )
         for field in self.fields:
