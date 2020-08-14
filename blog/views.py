@@ -130,7 +130,7 @@ class PostDetailView(View):
         if form.is_valid():
             new = form.save(commit=False)
             text = form.cleaned_data.get('text')
-            result = check_profanity_text(text).get()
+            result = check_profanity_text(text)
             if result:
                 new.user = request.user
                 new.post = post
