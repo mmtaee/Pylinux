@@ -14,7 +14,7 @@ urlpatterns = [
 
     path('tags/<int:id>/', TagsView.as_view(), name='tags'),
     path('detail/<int:id>/', PostDetailView.as_view(), name='detail'),
-    path('blog/#<int:id>@<str:category>/', BlogCategoryView.as_view(), name='blog_category'),
+    path('blog/<str:category>/<int:id>/', BlogCategoryView.as_view(), name='blog_category'),
 
     # Ajax
     path("ajax/comment_report/", CommentReportAjax.as_view()),
