@@ -20,7 +20,7 @@ class PostsSitemap(Sitemap):
     changefreq = "daily"
 
     def items(self):
-        posts = Post.objects.all().order_by('-title')
+        posts = Post.objects.filter(publish=True).order_by('-title')
         return posts
 
     def location(self, obj):

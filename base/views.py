@@ -95,18 +95,24 @@ class PostRequestManager(View):
 
         if action == 'no_pub':
             post.publish = False
+            post.save()
             msg = _('post will not be published')
-            messages.error(request, msg)
+            messages.warning(request, msg)
 
         elif action == 'pub':
             post.publish = True
+            post.save()
             msg = _('post will be published')
+            messages.success(request, msg)
+
+        elif action == 'delete':
+            post.delete()
+            msg = _('post deleted successfully')
             messages.success(request, msg)
 
         else:
             raise Http404()
 
-        post.save()
         if redirect_to:
             return redirect(redirect_to)
         return redirect('base:user_post')
