@@ -158,49 +158,6 @@ class PostDetailView(View):
 class SearchView(TemplateView):
     template_name = 'search.html'
 
-
-class ContactUsView(View):
-    template_name = 'contact.html'
-    form_class = ContactUsMessageForm
-
-    def get(self, request, *args, **kwargs):
-        context = {
-            'form' : self.form_class(),
-            'staffusers' : User.objects.filter(is_staff=True).order_by("-is_superuser"),
-            'site_key': settings.RECAPTCHA_SITE_KEY,
-            'site_key_v2': settings.RECAPTCHA_SITE_KEY_V2,
-        }
-        return render(request, self.template_name, context)
-
-    @method_decorator(check_recaptcha_v3)
-    @method_decorator(check_recaptcha_v2)
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            new = form.save(commit=False)
-            message = form.cleaned_data.get('message')
-            subject = form.cleaned_data.get('subject')
-            result_subject = check_profanity_text.delay(subject).get()
-            result = check_profanity_text.delay(message).get()
-            if result and result_subject:
-                new.save()
-            msg = _("your message has been successfully sent")
-            messages.success(request, msg)
-            return redirect("blog:contact_us")
-
-        context = {
-            'form' : form,
-            'staffusers' : User.objects.filter(is_staff=True).order_by("-is_superuser"),
-            'site_key': settings.RECAPTCHA_SITE_KEY,
-            'site_key_v2': settings.RECAPTCHA_SITE_KEY_V2,
-        }
-        return render(request, self.template_name, context)
-
-
-class AboutView(TemplateView):
-    template_name = 'about.html'
-
-
 # Ajax
 class CommentReportAjax(View):
 

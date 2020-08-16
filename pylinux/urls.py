@@ -5,15 +5,24 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns
 from decorator_include import decorator_include
+from django.contrib.sitemaps.views import sitemap
+
 
 from .decorators import *
 from user_auth.views import *
+from blog.sitemaps import *
 
+
+sitemaps = {
+    'static': StaticSitemap(),
+    'posts': PostsSitemap(),
+}
 
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('oauth/', include('social_django.urls', namespace='social')),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
 ]
 
 urlpatterns += i18n_patterns(

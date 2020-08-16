@@ -9,8 +9,6 @@ urlpatterns = [
     path('home/', HomePageView.as_view()),
     path('blog/', BlogView.as_view(), name='blog'),
     path('search/', SearchView.as_view(), name='search'),
-    path('contact_us/', ContactUsView.as_view(), name='contact_us'),
-
 
     path('tags/<int:id>/', TagsView.as_view(), name='tags'),
     path('detail/<int:id>/', PostDetailView.as_view(), name='detail'),

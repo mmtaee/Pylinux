@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'taggit',
     'social_django',
     'admin_honeypot',
+    'django.contrib.sitemaps',
     # apps :
     'user_auth.apps.UserAuthConfig',
     'base.apps.BaseConfig',
