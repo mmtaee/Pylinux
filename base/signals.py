@@ -1,6 +1,7 @@
 from django.db.models.signals import post_save, post_delete
 from django.contrib.sitemaps import ping_google
 from django.dispatch import receiver
+from django.conf import settings
 
 from .models import *
 from user_auth.models import *
@@ -19,10 +20,13 @@ def ping_google_sitemap(sender, **kwargs):
     try :
         ping_google(
             sitemap_url="/sitemap.xml",
-            ping_url = "",
+            ping_url = settings.PING_GOOGLE_URL,
             sitemap_uses_https = True
             )
     except Exception as error:
-        with open ("CEO_log.txt" , 'a') as f:
+        with open ("logs/ceo_log.txt" , 'a') as f:
             text = str(error) + "\n"
             f.write(text)
+
+
+

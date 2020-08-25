@@ -20,6 +20,7 @@ from random import randint
 from .models import *
 from .forms import *
 from pylinux.decorators import *
+from pylinux.instagram import send_to_instagram
 
 
 class CreatePostView(FormView):
@@ -39,6 +40,7 @@ class CreatePostView(FormView):
         form.save_m2m()
         # delete unused tag
         Tag.objects.annotate(ntag=Count('taggit_taggeditem_items')).filter(ntag=0).delete()
+        send_to_instagram(new)
         msg = _('post created successfully')
         messages.success(self.request, msg)
         self.success_url = reverse_lazy('base:post_detail', kwargs={'id' : new.id})

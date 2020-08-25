@@ -4,7 +4,7 @@ My Blog with Django !
     - recapcha V2 and V3 together
     - maximum try for days in session (activation link and new password)
     - template tags
-    - make your own templates (exp : http://www.pylinx.ir)
+    - make your own templates (exp : http://www.pylinux.ir)
 
     base : 
         - internal messaging (writer, staff, superusers) and reply
