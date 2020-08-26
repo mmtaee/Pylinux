@@ -201,10 +201,13 @@ class BlogSortAjax(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        if self.request.GET.get("pageNumber", None):
-            page_number = self.request.GET.get("pageNumber", None)
+        page_number = self.request.GET.get("pageNumber", None)
+        if page_number:
             context['page_number'] = self.request.GET.get("pageNumber").strip()
-        context['page_range'] = Paginator(self.query, self.paginate_by).page_range
+
+        page_range = Paginator(self.query, self.paginate_by).page_range
+        if len(page_range) > 1:
+            context['page_range'] = page_range
         return context
 
 
@@ -233,11 +236,14 @@ class BlogCategorySortAjax(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        if self.request.GET.get("pageNumber", None):
-            page_number = self.request.GET.get("pageNumber", None)
+        page_number = self.request.GET.get("pageNumber", None)
+        if page_number:
             context['page_number'] = self.request.GET.get("pageNumber").strip()
+
+        page_range = Paginator(self.query, self.paginate_by).page_range
+        if len(page_range) > 1:
+            context['page_range'] = page_range
         context['category_type'] = (self.request.GET.get("category_type", None)).strip()
-        context['page_range'] = Paginator(self.query, self.paginate_by).page_range
         return context
 
 
