@@ -15,10 +15,7 @@ def site_requests(sender, environ, **kwargs):
     home_url = host + "/"
 
     if request_url == home_url:
-        home, create = HomeRequest.objects.get_or_create(
-            date__month=current_month,
-            date__year=current_year,
-            )
+        home, create = HomeRequest.objects.get_or_create(date=datetime.today())
         home.num +=1
         home.save()
 
