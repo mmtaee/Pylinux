@@ -9,7 +9,8 @@ urlpatterns = [
     path('home/', HomePageView.as_view()),
     path('blog/', BlogView.as_view(), name='blog'),
     path('search/', SearchView.as_view(), name='search'),
-
+    path('site_plots/', SitePlotsView.as_view(), name='site_plots'),
+    
     path('tags/<int:id>/', TagsView.as_view(), name='tags'),
     path('detail/<int:id>/', PostDetailView.as_view(), name='detail'),
     path('blog/<str:category>/<int:id>/', BlogCategoryView.as_view(), name='blog_category'),

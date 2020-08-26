@@ -21,10 +21,8 @@ urlpatterns = [
     path('contact_us_messages/', ContactUsMessageView.as_view(), name='contact_us_message'),
     path('contact_us_messages_delete/<int:id>/', ContactUsMessageDeleteView.as_view(), name='delete_contact_us_message'),
 
-
     path('message_send/<int:id>/', DetailsendMessageView.as_view(), name='detail_send_message'),
     path('message_delete/<int:id>/', InboxDeleteMessage.as_view(), name='delete_message'),
     path('message_reply/<int:id>/', MessageReplyView.as_view(), name='reply_message'),
     path('message_reply_delete/<int:id>/', MessageReplyDeleteView.as_view(), name='delete_reply_message'),
-    
 ]

@@ -7,7 +7,16 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
 
+from datetime import datetime, timedelta
+import jdatetime
+import matplotlib.pyplot as plt
+import io
+import urllib, base64
+import numpy as np
+from dateutil.relativedelta import relativedelta
+
 from base.models import *
+from .models import *
 from taggit.models import Tag
 from .forms import *
 from base.forms import *
@@ -157,6 +166,49 @@ class PostDetailView(View):
 
 class SearchView(TemplateView):
     template_name = 'search.html'
+
+
+class SitePlotsView(TemplateView):
+    template_name = 'site_plots.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        def autolabel(rects, ax):
+            for rect in rects:
+                height = rect.get_height()
+                ax.text(rect.get_x() + rect.get_width() / 2.0, 1.0 * height, '%d' % int(height), ha='center', va='bottom')
+
+        def plot_creator(queryset, header):
+            day_list = []
+            num_list = []
+            for query in queryset:
+                day = jdatetime.datetime.fromgregorian(datetime=query.date)
+                day_list.append(str(day.day) + "/" + day.strftime("%B"))
+                num_list.append(query.num)
+            ind = np.arange(len(day_list))
+            width = 0.2
+            fig, ax = plt.subplots()
+            plt.suptitle(header)
+            plot = ax.bar(ind, num_list, width, color='g', align='center')
+            plt.xticks(ind, day_list)
+            plt.ylabel('person')
+            plt.xlabel('day')
+            autolabel(plot, ax)
+            fig = plt.gcf()
+            buf = io.BytesIO()
+            fig.savefig(buf, format='png')
+            buf.seek(0)
+            string = base64.b64encode(buf.read())
+            return urllib.parse.quote(string)
+
+        date = datetime.today() + relativedelta(months=-2)
+        home = HomeRequest.objects.filter(date__month__gte=date.month).order_by("date")
+        blog = BlogRequest.objects.filter(date__month__gte=date.month).order_by("date")
+
+        context['home_plot'] = plot_creator(home, _('Homepage Visitors Plot'))
+        context['blog_plot'] = plot_creator(blog, _('Blogpage Visitors Plot'))
+        return context
+
 
 # Ajax
 class CommentReportAjax(View):

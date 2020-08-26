@@ -12,9 +12,7 @@ from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.db.models import Count
 
-
 from taggit.models import Tag
-from datetime import timedelta
 from random import randint
 
 from .models import *
