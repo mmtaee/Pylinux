@@ -120,23 +120,27 @@ def complete_bio(view_func):
     def wrap(request, *args, **kwargs):
         image_profile = request.user.image.url
         bio = request.user.bio
-        if bio is None or bio == "" :
-            msg = _("first write your bio")
-            messages.error(request, msg)
-            
+
+        if not request.user.username:
+            msg = _("choose a username, complete your bio and choose a image for your profile")
+            messages.warning(request, msg)
+
+        elif bio is None or bio == "" :
+            msg = _("write your bio")
+            messages.warning(request, msg)
+
         elif len(bio) < 10:
             msg = _("complete your bio")
-            messages.error(request, msg)
+            messages.warning(request, msg)
 
         elif image_profile == '/media/static/user.jpg':
             msg = _("choose a image for your profile")
-            messages.error(request, msg)
+            messages.warning(request, msg)
 
         else:
             return view_func(request, *args, **kwargs)
 
         return redirect("auth:profile")
-
 
     return wrap
 
@@ -145,10 +149,10 @@ def complete_oauth_profile(view_func):
 
     def wrap(request, *args, **kwargs):
         if request.user.is_authenticated:
-            if not request.user.username or not request.user.password :
-                msg = _("You must first have a username and password")
+            if not request.user.password :
+                msg = _("You must first have password")
                 messages.warning(request, msg)
-                return redirect("auth:profile")
+                return redirect("auth:change_password")
         return view_func(request, *args, **kwargs)
 
     return wrap

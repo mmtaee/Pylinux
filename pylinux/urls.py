@@ -23,7 +23,7 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('oauth/', include('social_django.urls', namespace='social')),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
+    path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}),
     path('robots.txt/', TemplateView.as_view(template_name='robots.txt', content_type="text/plain")),
 ]
 

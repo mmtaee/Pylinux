@@ -100,39 +100,51 @@ class LoginForm(forms.Form):
 
 
 class ProfileForm(forms.ModelForm):
-    password = forms.CharField(required=True, max_length=32, widget=forms.PasswordInput, label=_("password"))
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'bio', 'image', 'whatsapp', 'instagram', 'github', 'gitlab']
+        fields = ['username', 'bio', 'image', 'whatsapp', 'instagram', 'github', 'gitlab']
         widgets = {
             'bio' : forms.Textarea(attrs={'rows': 4,}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        no_req = ['bio', 'image', 'whatsapp', 'instagram', 'github', 'gitlab']
+        no_req = ['whatsapp', 'instagram', 'github', 'gitlab']
         for field in self.fields:
-            if field != 'image' :
-                self.fields[field].widget.attrs.update({'class' : 'form-control p-4', 'placeholder': _(field)})
-            if field not in no_req:
-                self.fields[field].requierd = True
-            else:
-                self.fields[field].requierd = False
+            self.fields[field].requierd = False
+            if field in no_req:
                 self.fields[field].widget.attrs.update({'class' : 'form-control p-4 text-left', 'placeholder': _(field)})
+            else:
+                self.fields[field].widget.attrs.update({'class' : 'form-control p-4', 'placeholder': _(field)})
 
         self.fields['image'].widget.attrs.update({'class' : 'form-control-file',})
         self.fields['bio'].widget.attrs.update({'placeholder': _("write something about yourself")})
 
+
+class ChangePasswordForm(forms.Form):
+    password = forms.CharField(label=_("Password"), max_length=50, required=True, widget=forms.PasswordInput())
+    password_confirmation = forms.CharField(label=_("Repeat Password"), max_length=50, required=True, widget=forms.PasswordInput())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password'].widget.attrs.update({'class': 'form-control p-4', 'placeholder': _("password")})
+        self.fields['password_confirmation'].widget.attrs.update({'class': 'form-control p-4', 'placeholder': _("repeat password")})
+
+
     def clean_password(self) :
-        cleaned_data = super().clean()
+        super().clean()
         password = self.cleaned_data['password']
-        list_ok = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.@#$%*&^%"
-        for i in password :
-            if i not in list_ok :
-                raise ValidationError(_("invalid password type"))
         if len(password) < 8 :
-            raise forms.ValidationError(_("minimum length of password must be 8 characters"))
+            raise forms.ValidationError(_("Minimum Length Of Password Must Be 8 Characters"))
         elif password.isnumeric() :
-            raise forms.ValidationError(_("password must contain at least one character"))
+            raise forms.ValidationError(_("Password Must Contain At Least One Character"))
         return password
+
+    def clean_password_confirmation(self):
+        super().clean()
+        password= self.cleaned_data.get('password')
+        password_confirmation = self.cleaned_data.get('password_confirmation')
+        if password != password_confirmation:
+            raise forms.ValidationError(_("Repeat password is not the same as the password "))
+        return password_confirmation

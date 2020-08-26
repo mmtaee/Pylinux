@@ -13,7 +13,7 @@ class User(AbstractUser):
         max_length=255,
         unique=True,
     )
-    username = models.CharField(max_length=150, verbose_name='username')
+    username = models.CharField(max_length=150, verbose_name='username', null=True, blank=True)
     is_writer = models.BooleanField(default=False)
     is_online = models.BooleanField(default=False)
     whatsapp = models.URLField(null=True, blank=True)
@@ -27,4 +27,6 @@ class User(AbstractUser):
     objects = UserManager()
 
     def __str__(self):
+        if not self.username:
+            return self.email
         return self.username

@@ -250,8 +250,6 @@ class ProfileView(View):
         form = self.form_class(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             user = form.save(commit=False)
-            password = form.cleaned_data.get('password')
-            user.set_password(password)
             user.save()
             update_session_auth_hash(request, user)
             msg = _('your profile changed successfully')
@@ -261,6 +259,27 @@ class ProfileView(View):
             'form' : form,
         }
         return render(request, self.template_name, context)
+
+
+class ChangePasswordView(FormView):
+    template_name = 'change_password.html'
+    form_class = ChangePasswordForm
+    success_url = "/"
+
+    @method_decorator(login_required(login_url=reverse_lazy('auth:login')))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        user = get_object_or_404(User, id=self.request.user.id)
+        password = form.cleaned_data.get('password')
+        user.set_password(password)
+        user.save()
+        update_session_auth_hash(self.request, user)
+        msg = _('password changed successfully')
+        messages.success(self.request, msg)
+        return super().form_valid(form)
+
 
 
 # handlers

@@ -11,6 +11,7 @@ urlpatterns = [
     path('recover_activation/', ForgotActivationView.as_view(), name='forgot_activation'),
     path('activate/<str:uidb64>/<str:token>/',Activation.as_view(), name='activate'),
     path('profile/', ProfileView.as_view(), name='profile'),
+    path('change_password/', ChangePasswordView.as_view(), name='change_password'),
 
     # handler test
     path('test/<int:status_code>/', HandlerTest.as_view()),
