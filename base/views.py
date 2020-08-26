@@ -81,9 +81,9 @@ class ListUserPostView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         if not self.request.user.is_staff:
-            posts = Post.objects.filter(user=self.request.user).order_by('-create', '-last_update')
+            posts = Post.objects.filter(user=self.request.user).order_by('publish', '-create', '-last_update')
         else:
-            posts = Post.objects.all().order_by('-create', '-last_update', '-user')
+            posts = Post.objects.all().order_by('publish', '-create', '-last_update', '-user')
         return posts
 
 
